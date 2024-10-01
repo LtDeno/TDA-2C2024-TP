@@ -1,6 +1,7 @@
 # TDA-2C2024-TP
 
 Ejemplo de comando de ejecución (en el mismo directorio del archivo .py):
+
 python parte1.py "datos_parte1/20.txt"
 
 Donde parte1.py es el programa, el string que le sigue es el path del set de datos.
