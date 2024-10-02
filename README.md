@@ -1,5 +1,9 @@
 # TDA-2C2024-TP
 
+Miembros:
+- 108460, femartinez@fi.uba.ar
+- 107394, ldenobili@fi.uba.ar
+
 Ejemplo de comando de ejecución (en el mismo directorio del archivo .py):
 
 python parte1.py "datos_parte1/20.txt"
