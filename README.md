@@ -4,6 +4,7 @@ Miembros:
 - 108460, femartinez@fi.uba.ar
 - 107394, ldenobili@fi.uba.ar
 - 108905, jalzogaray@fi.uba.ar
+- 107577, wbritez@fi.uba.ar
 
 Ejemplo de comando de ejecución (en el mismo directorio del archivo .py):
 
