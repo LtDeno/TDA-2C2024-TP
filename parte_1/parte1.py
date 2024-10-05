@@ -51,7 +51,11 @@ if __name__ == "__main__":
             file = open(sys.argv[1], "rt")
             for line in file.read().splitlines():
                 if not line.startswith("#"):
-                    print(greedy(obtener_lista_monedas(line)))
+                    res = greedy(obtener_lista_monedas(line))
+                    print(sys.argv[1])
+                    print(res[2])
+                    print("Ganancia de Sophia:", res[0])
+                    print("Ganancia de Mateo:", res[1])
                     break
             file.close()
         else:
