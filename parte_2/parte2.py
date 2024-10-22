@@ -14,7 +14,7 @@ def turno_mateo_greedy(arr_turnos, arr_monedas, arr_datos):
 
 def pdinamica(arr_datos):
     cant_monedas = len(arr_datos)
-    ganancia = [[0 for _ in range(cant_monedas)] for _ in range(cant_monedas)]
+    tabla_ganancia = [[0 for _ in range(cant_monedas)] for _ in range(cant_monedas)]
     # En el ejercicio "Caminos posibles de un laberinto", la ecuacion de recurrencia es:
     # Posibles[i][j] = Posibles[i-1][j] + Posibles[i][j-1]
 
@@ -63,7 +63,7 @@ def pdinamica(arr_datos):
      ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     """
 
-    return ganancia
+    return [0, 0, []]
 
 
 def obtener_lista_monedas(valores):
