@@ -39,6 +39,30 @@ def pdinamica(arr_datos):
     # OPT(i, j-2) es el turno de Sophia si agarro la ultima, porque Mateo agarro la ultima (derecha, derecha)
     # OPT(i-1, j-1) es el turno de Sophia si agarro la ultima, porque Mateo agarro la primera (derecha, abajo)
 
+    """
+    Habia escrito mal la ecuacion de recurrencia. Si bien la idea y texto estaban bien, la ecuacion no lo estaba.
+    No esta bien restar a i cuando justamente es el indice del primer valor del arreglo...
+    
+    OPT(i, f) = max(V[i] + min(OPT(i + 1, f - 1), OPT(i + 2, f)), V[f] + min(OPT(i + 1, f - 1), OPT(i, f - 2)))
+    
+    i = indice primer valor del arreglo.
+    f = indice ultimo valor del arreglo (len(V) - 1).
+    max() = porque Sophia quiere maximizar su ganancia.
+    V[i] = primer valor del arreglo, si lo toma, se pasa a (i + 1, f).
+    V[j] = ultimo valor del arreglo, si lo toma, se pasa a (i, f - 1).
+    min() = contemplar que Mateo se robo el max entre (i + 1, f) o (i, f - 1).
+    OPT(i + 1, f - 1) = implica que Mateo se agarro el ultimo, V[f], posterior a Sophia agarrar el primero, V[i].
+    OPT(i + 2, f) = implica que Mateo se agarro el primero, V[i], posterior a Sophia agarrar el primero, V[i].
+    OPT(i + 1, f - 1) = implica que Mateo se agarro el primero, V[i], posterior a Sophia agarrar el ultimo, V[f].
+    OPT(i, f - 2) = implica que Mateo se agarro el ultimo, V[f], posterior a Sophia agarrar el ultimo, V[i].
+    
+     ______________________________________________________________________________
+    |-------------------------| Sophia agarra el primero | Sophia agarra el ultimo |
+    | Mateo agarra el primero |      OPT(i + 2, f)       |    OPT(i + 1, f - 1)    |
+    | Mateo agarra el ultimo  |     OPT(i + 1, f - 1)    |      OPT(i, f - 2)      |
+     ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+    """
+
     return ganancia
 
 
