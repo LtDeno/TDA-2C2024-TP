@@ -14,7 +14,8 @@ def turno_mateo_greedy(arr_turnos, arr_monedas, arr_datos):
 
 def pdinamica(arr_datos):
     cant_monedas = len(arr_datos)
-    tabla_ganancia = [[0 for _ in range(cant_monedas)] for _ in range(cant_monedas)]
+    tabla_ganancia = [0 for _ in range(cant_monedas)]
+
     # En el ejercicio "Caminos posibles de un laberinto", la ecuacion de recurrencia es:
     # Posibles[i][j] = Posibles[i-1][j] + Posibles[i][j-1]
 
@@ -61,6 +62,11 @@ def pdinamica(arr_datos):
     | Mateo agarra el primero |      OPT(i + 2, f)       |    OPT(i + 1, f - 1)    |
     | Mateo agarra el ultimo  |     OPT(i + 1, f - 1)    |      OPT(i, f - 2)      |
      ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+    
+    Es estupido buscar el min() entre dos optimos cuando el objetivo es buscar el maximo valor obtenible posible.
+    Queda mejor representado el que Mateo se agarre el primero o el ultimo usando una funcion partida/
+    OPT(i, f) = max(V[i] + (OPT(i + 1, f - 1) si V[i+1] < V[f] else OPT(i + 2, f)),
+                    V[f] + (OPT(i + 1, f - 1) si V[i] > V[f-1] else OPT(i, f - 2))
     """
 
     return [0, 0, []]
