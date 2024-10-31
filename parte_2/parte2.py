@@ -15,35 +15,7 @@ def turno_mateo_greedy(arr_turnos, arr_monedas, arr_datos):
 def pdinamica(arr_datos):
     cant_monedas = len(arr_datos)
     tabla_ganancia = [0 for _ in range(cant_monedas)]
-
-    # En el ejercicio "Caminos posibles de un laberinto", la ecuacion de recurrencia es:
-    # Posibles[i][j] = Posibles[i-1][j] + Posibles[i][j-1]
-
-    # (i-1 es haber venido de arriba, j-1 es haber venido de la izquierda)
-    # En el ejercicio que le sigue, el laberinto pero con ganancias, en si es el mismo concepto, recorrer una matriz
-    # ubicando la mayor ganancia al pasar pos las celdas, pero no nos dieron ecuacion de recurrencia... sospechoso.
-    # En el siguiente a ese, es el anterior pero con obstaculos, nuevamente, sin ecuacionm de recurrencia.
-    # Y si eso es equivalente a la segunda parte del TP? Siendo mateo los obstaculos, la primera moneda el caminar
-    # hacia abajo, la ultima moneda el caminar hacia la derecha, recorrer una matriz, maximizando la ganancia.
-
-    # Ecuacion de recurrencia que propongo:
-    # OPT(i, j) = max   -> viene de arriba (agarro la primera):       V[i, j] + min(OPT(i-2, j), OPT(i-1, j-1))
-    #                   -> viene de la izquierda (agarro la ultima):  V[i, j] + min(OPT(i, j-2), OPT(i-1, j-1))
-
-    # min(OPT(i-2, j), OPT(i-1, j-1)) y min(OPT(i, j-2), OPT(i-1, j-1)) usa min porque Mateo manoteo la mas grande
-    # entre las posibilidades anteriores al camino que tomo Sophia. El turno anterior era (i-1, j) si Sophia tomo la
-    # primera o (i, j-1) si tomo la ultima.
-
-    # Recordando que Mateo siempre agarra la mas grande en su turno:
-    # OPT(i-2, j) es el turno de Sophia si agarro la primera, porque Mateo agarro la ultima (abajo, abajo)
-    # OPT(i-1, j-1) es el turno de Sophia si agarro la primera, porque Mateo agarro la primera (abajo, derecha)
-    # OPT(i, j-2) es el turno de Sophia si agarro la ultima, porque Mateo agarro la ultima (derecha, derecha)
-    # OPT(i-1, j-1) es el turno de Sophia si agarro la ultima, porque Mateo agarro la primera (derecha, abajo)
-
     """
-    Habia escrito mal la ecuacion de recurrencia. Si bien la idea y texto estaban bien, la ecuacion no lo estaba.
-    No esta bien restar a i cuando justamente es el indice del primer valor del arreglo...
-    
     OPT(i, f) = max(V[i] + min(OPT(i + 1, f - 1), OPT(i + 2, f)), V[f] + min(OPT(i + 1, f - 1), OPT(i, f - 2)))
     
     i = indice primer valor del arreglo.
@@ -63,10 +35,16 @@ def pdinamica(arr_datos):
     | Mateo agarra el ultimo  |     OPT(i + 1, f - 1)    |      OPT(i, f - 2)      |
      ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     
+    Edit:
     Es estupido buscar el min() entre dos optimos cuando el objetivo es buscar el maximo valor obtenible posible.
-    Queda mejor representado el que Mateo se agarre el primero o el ultimo usando una funcion partida/
+    Queda mejor representado el que Mateo se agarre el primero o el ultimo usando una funcion partida:
+    
     OPT(i, f) = max(V[i] + (OPT(i + 1, f - 1) si V[i+1] < V[f] else OPT(i + 2, f)),
                     V[f] + (OPT(i + 1, f - 1) si V[i] > V[f-1] else OPT(i, f - 2))
+                    
+    Yendo a la representacion, i es tanto el indice de inicio del arreglo como la fila, y f es el indice del fin del 
+    arreglo tal cual es la columna. Mirar el seguimiento de la ecuacion de recurrencia del .xlsx. Las casillas azules 
+    son los seguimientos de los optimos para esos dados (i, f), y cada valor de la tabla tambien lo es para cada tal.
     """
 
     return [0, 0, []]
