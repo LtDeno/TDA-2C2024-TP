@@ -1,14 +1,14 @@
 import sys
 
 """
-    OPT(i, f) = max(V[i] + min(OPT(i + 1, f - 1), OPT(i + 2, f)), V[f] + min(OPT(i + 1, f - 1), OPT(i, f - 2)))
+    OPT(i, f) = max(V[i] + (OPT(i + 1, f - 1) si V[i+1] < V[f] sino OPT(i + 2, f)),
+                    V[f] + (OPT(i + 1, f - 1) si V[i] > V[f-1] sino OPT(i, f - 2))
     
     i = indice primer valor del arreglo.
     f = indice ultimo valor del arreglo (len(V) - 1).
     max() = porque Sophia quiere maximizar su ganancia.
     V[i] = primer valor del arreglo, si lo toma, se pasa a (i + 1, f).
     V[j] = ultimo valor del arreglo, si lo toma, se pasa a (i, f - 1).
-    min() = contemplar que Mateo se robo el max entre (i + 1, f) o (i, f - 1).
     OPT(i + 1, f - 1) = implica que Mateo se agarro el ultimo, V[f], posterior a Sophia agarrar el primero, V[i].
     OPT(i + 2, f) = implica que Mateo se agarro el primero, V[i], posterior a Sophia agarrar el primero, V[i].
     OPT(i + 1, f - 1) = implica que Mateo se agarro el primero, V[i], posterior a Sophia agarrar el ultimo, V[f].
@@ -19,14 +19,7 @@ import sys
     | Mateo agarra el primero |      OPT(i + 2, f)       |    OPT(i + 1, f - 1)    |
     | Mateo agarra el ultimo  |     OPT(i + 1, f - 1)    |      OPT(i, f - 2)      |
      ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-    
-    Edit:
-    Es estupido buscar el min() entre dos optimos cuando el objetivo es buscar el maximo valor obtenible posible.
-    Queda mejor representado el que Mateo se agarre el primero o el ultimo usando una funcion partida:
-    
-    OPT(i, f) = max(V[i] + (OPT(i + 1, f - 1) si V[i+1] < V[f] sino OPT(i + 2, f)),
-                    V[f] + (OPT(i + 1, f - 1) si V[i] > V[f-1] sino OPT(i, f - 2))
-                    
+     
     Yendo a la representacion, i es tanto el indice de inicio del arreglo como la fila, y f es el indice del fin del 
     arreglo tal cual es la columna. Mirar el seguimiento de la ecuacion de recurrencia del .xlsx. Las casillas azules 
     son los seguimientos de los optimos para esos dados (i, f), y cada valor de la tabla tambien lo es para cada tal.
