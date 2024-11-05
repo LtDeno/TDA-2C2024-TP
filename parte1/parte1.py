@@ -45,23 +45,23 @@ def greedy(arr_datos):
     return [turnos, "Ganancia de Sophia: " + str(sum(monedas_sophia))]
 
 
-def obtener_lista_monedas(valores):
-    return list(map(int, valores.split(";")))
-
-
-if __name__ == "__main__":
+def obtener_lista_monedas(path):
+    monedas = None
     try:
-        if len(sys.argv) > 1:
-            file = open(sys.argv[1], "rt")
-            for line in file.read().splitlines():
-                if not line.startswith("#"):
-                    res = greedy(obtener_lista_monedas(line))
-                    print(res[0], res[1], sep="\n")
-                    break
-            file.close()
-        else:
-            print(greedy([]))
-
+        file = open(path, "rt")
+        for line in file.read().splitlines():
+            if not line.startswith("#"):
+                monedas = list(map(int, line.split(";")))
+                break
+        file.close()
     except IOError or OSError:
         print("Error al abrir el archivo")
         sys.exit()
+
+    return monedas
+
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        res = greedy(obtener_lista_monedas(sys.argv[1]))
+        print(res[0], res[1], sep="\n")

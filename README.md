@@ -10,6 +10,14 @@ Ejemplo de comando de ejecución (en el mismo directorio del archivo .py):
 
 python parte1.py "20.txt"
 
+Para la ejecucion del programa en la parte 3, hay que especificar, ademas, el algoritmo deseado:
+- "BT" para utilizar Backtracking según la consigna 3 (usado por defecto);
+- "PL" para utilizar Programación Lineal según la consigna 4;
+- "JJ" para utilizar John Jellicoe según la consigna 5;
+- "AP" para utilizar la aproximación según la consigna 6.
+
+python parte3.py "3_3_2.txt" "BT"
+
 Donde parte1.py es el programa, el string que le sigue es el path del set de datos.
 El archivo del set de datos tendrá el mismo formato que los datos brindados por la cátedra,
 líneas comentadas con "#" y los valores de las monedas separados con ";" y su en el orden que vienen.

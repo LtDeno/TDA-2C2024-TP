@@ -1,27 +1,16 @@
 import parte2
 
 
-def abrir_datos(path):
-    file = open(path, "rt")
-    datos = []
-    for line in file.read().splitlines():
-        if not line.startswith("#"):
-            datos = parte2.obtener_lista_monedas(line)
-            break
-    file.close()
-    return datos
-
-
-res5 = parte2.pdinamica(abrir_datos("5.txt"))
-res10 = parte2.pdinamica(abrir_datos("10.txt"))
-res20 = parte2.pdinamica(abrir_datos("20.txt"))
-res25 = parte2.pdinamica(abrir_datos("25.txt"))
-res50 = parte2.pdinamica(abrir_datos("50.txt"))
-res100 = parte2.pdinamica(abrir_datos("100.txt"))
-res1000 = parte2.pdinamica(abrir_datos("1000.txt"))
-res2000 = parte2.pdinamica(abrir_datos("2000.txt"))
-res5000 = parte2.pdinamica(abrir_datos("5000.txt"))
-res10000 = parte2.pdinamica(abrir_datos("10000.txt"))
+res5 = parte2.pdinamica(parte2.obtener_lista_monedas("5.txt"))
+res10 = parte2.pdinamica(parte2.obtener_lista_monedas("10.txt"))
+res20 = parte2.pdinamica(parte2.obtener_lista_monedas("20.txt"))
+res25 = parte2.pdinamica(parte2.obtener_lista_monedas("25.txt"))
+res50 = parte2.pdinamica(parte2.obtener_lista_monedas("50.txt"))
+res100 = parte2.pdinamica(parte2.obtener_lista_monedas("100.txt"))
+res1000 = parte2.pdinamica(parte2.obtener_lista_monedas("1000.txt"))
+res2000 = parte2.pdinamica(parte2.obtener_lista_monedas("2000.txt"))
+res5000 = parte2.pdinamica(parte2.obtener_lista_monedas("5000.txt"))
+res10000 = parte2.pdinamica(parte2.obtener_lista_monedas("10000.txt"))
 
 # Sophiaabrir_datos
 assert res5[1] == "Ganancia Sophia: " + str(1483)

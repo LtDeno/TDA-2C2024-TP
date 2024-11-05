@@ -106,21 +106,23 @@ def pdinamica(monedas):
     return reconstruccion(monedas, tabla)
 
 
-def obtener_lista_monedas(valores):
-    return list(map(int, valores.split(";")))
+def obtener_lista_monedas(path):
+    monedas = None
+    try:
+        file = open(path, "rt")
+        for line in file.read().splitlines():
+            if not line.startswith("#"):
+                monedas = list(map(int, line.split(";")))
+                break
+        file.close()
+    except IOError or OSError:
+        print("Error al abrir el archivo")
+        sys.exit()
+
+    return monedas
 
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        try:
-            file = open(sys.argv[1], "rt")
-            for line in file.read().splitlines():
-                if not line.startswith("#"):
-                    res = pdinamica(obtener_lista_monedas(line))
-                    print(res[0], res[1], res[2], sep="\n")
-                    break
-
-            file.close()
-        except IOError or OSError:
-            print("Error al abrir el archivo")
-            sys.exit()
+        res = pdinamica(obtener_lista_monedas(sys.argv[1]))
+        print(res[0], res[1], res[2], sep="\n")
