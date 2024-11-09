@@ -72,34 +72,38 @@ def validar_demanda(tablero, d_filas, d_columnas):
 
 
 # Crea un formato segun Resultados_Esperados.txt
-def formatear_tablero(tablero, barcos, d_filas, d_columnas, d_total):
+def formatear_resultados(tablero, asignaciones, d_filas, d_columnas, d_total):
     formateado = ["Posiciones:"]
-
-    """
-    formateado.append() con cada barco en la forma, y usando de ejemplo el 3_3_2.txt:
-    0: (0, 1)
-    1: (2, 1)
-    """
+    for i in range(asignaciones):
+        formateado.append(str(i) + ": " + str(asignaciones[i][1]) + " - " + str(asignaciones[i][0]))
 
     formateado.append("Demanda cumplida: " + str(d_total - validar_demanda(tablero, d_filas, d_columnas)))
     formateado.append("Demanda total: " + str(d_total))
     return formateado
 
 
+def gen_asignacion(fila_fin, fila_inicio, columna_fin, columna_inicio):
+    return [(fila_fin, columna_fin), (fila_inicio, columna_inicio)]
+
+
 # Elije el algoritmo segun el argumento de ejecucion del programa, usa por defecto Backtracking.
+# El algoritmo devuelve la asignacion de posiciones, y ya que estamos,
+# coloca los barcos en el tablero para que el validador lo valide.
+# Las asignaciones han de ser ordenadas segun el orden en el arreglo de barcos y generadas usando gen_asignacion().
 def elegir_algoritmo(datos, modo):
     tablero = [[0 for _ in range(len(datos[2]))] for _ in range(len(datos[1]))]
+    asignaciones = None
 
     if modo == "PL":
-        pl.proglineal(tablero, datos[0], datos[1], datos[2])
+        asignaciones = pl.proglineal(tablero, datos[0], datos[1], datos[2])
     elif modo == "JJ":
-        jj.johnjellicoe(tablero, datos[0], datos[1], datos[2])
+        asignaciones = jj.johnjellicoe(tablero, datos[0], datos[1], datos[2])
     elif modo == "AP":
-        ap.aproximacion(tablero, datos[0], datos[1], datos[2])
+        asignaciones = ap.aproximacion(tablero, datos[0], datos[1], datos[2])
     else:
-        bt.backtracking(tablero, datos[0], datos[1], datos[2])
+        asignaciones = bt.backtracking(tablero, datos[0], datos[1], datos[2])
 
-    return formatear_tablero(tablero, datos[0], datos[1], datos[2], sum(datos[1]) + sum(datos[2]))
+    return formatear_resultados(tablero, asignaciones, datos[1], datos[2], sum(datos[1]) + sum(datos[2]))
 
 
 # Devuelve un array con, y en este orden: array de barcos, array de demanda de filas y array de demanda de columnas.
