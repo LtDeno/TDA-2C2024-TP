@@ -19,7 +19,6 @@ import sys
 def turno(indicacion, arr_turnos, indice, arr_monedas, arr_datos):
     arr_turnos.append(indicacion)
     arr_monedas.append(arr_datos[indice])
-    arr_datos.pop(indice)
 
 
 # Devuelve un array segun lo pedido en Resultados_Esperados.txt
@@ -27,22 +26,26 @@ def greedy(arr_datos):
     turnos = []
     monedas_sophia = []
     monedas_mateo = []
+
+    i_primera = 0
+    i_ultima = len(arr_datos) - 1
     turno_sophia = True
-
-    while len(arr_datos) > 0:
+    while i_primera <= i_ultima:
         if turno_sophia:
-            if arr_datos[0] > arr_datos[len(arr_datos) - 1]:
-                turno("Primera moneda para Sophia", turnos, 0, monedas_sophia, arr_datos)
+            if arr_datos[i_primera] >= arr_datos[i_ultima]:
+                turno("Primera moneda para Sophia", turnos, i_primera, monedas_sophia, arr_datos)
+                i_primera += 1	
             else:
-                turno("Última moneda para Sophia", turnos, len(arr_datos) - 1, monedas_sophia, arr_datos)
+                turno("Última moneda para Sophia", turnos, i_ultima, monedas_sophia, arr_datos)
+                i_ultima -= 1
         else:
-            if arr_datos[0] < arr_datos[len(arr_datos) - 1]:
-                turno("Primera moneda para Mateo", turnos, 0, monedas_mateo, arr_datos)
+            if arr_datos[i_primera] <= arr_datos[i_ultima]:
+                turno("Primera moneda para Mateo", turnos, i_primera, monedas_mateo, arr_datos)
+                i_primera += 1
             else:
-                turno("Última moneda para Mateo", turnos, len(arr_datos) - 1, monedas_mateo, arr_datos)
+                turno("Última moneda para Mateo", turnos, i_ultima, monedas_mateo, arr_datos)
+                i_ultima -= 1
         turno_sophia = not turno_sophia
-
-    return [turnos, "Ganancia de Sophia: " + str(sum(monedas_sophia))]
 
 
 def obtener_lista_monedas(path):
