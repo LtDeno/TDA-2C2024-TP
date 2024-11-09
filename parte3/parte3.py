@@ -1,4 +1,4 @@
-import sys
+import sys, bt, pl, jj, ap
 
 
 """
@@ -53,26 +53,8 @@ import sys
 """
 
 
-def backtracking(tablero, barcos, d_filas, d_columnas):
-    return tablero
-
-
-def prog_lineal(tablero, barcos, d_filas, d_columnas):
-    return tablero
-
-
-def johnjellicoe(tablero, barcos, d_filas, d_columnas):
-    d_filas.sort()
-    d_columnas.sort()
-    return tablero
-
-
-def aproximacion(tablero, barcos, d_filas, d_columnas):
-    return tablero
-
-
 # Devuelve la demanda insatisfecha/restante
-def validador(tablero, d_filas, d_columnas):
+def validar_demanda(tablero, d_filas, d_columnas):
     demanda_sobresatisfecha = False  # para comprobar que una demanda de fila o columna no se haya pasado
     for i in range(len(tablero)):  # itero filas
         if d_filas[i] < 0:  # demasiadas casillas ocupadas en la fila i
@@ -99,7 +81,7 @@ def formatear_tablero(tablero, barcos, d_filas, d_columnas, d_total):
     1: (2, 1)
     """
 
-    formateado.append("Demanda cumplida: " + str(d_total - validador(tablero, d_filas, d_columnas)))
+    formateado.append("Demanda cumplida: " + str(d_total - validar_demanda(tablero, d_filas, d_columnas)))
     formateado.append("Demanda total: " + str(d_total))
     return formateado
 
@@ -109,13 +91,13 @@ def elegir_algoritmo(datos, modo):
     tablero = [[0 for _ in range(len(datos[2]))] for _ in range(len(datos[1]))]
 
     if modo == "PL":
-        prog_lineal(tablero, datos[0], datos[1], datos[2])
+        pl.proglineal(tablero, datos[0], datos[1], datos[2])
     elif modo == "JJ":
-        johnjellicoe(tablero, datos[0], datos[1], datos[2])
+        jj.johnjellicoe(tablero, datos[0], datos[1], datos[2])
     elif modo == "AP":
-        aproximacion(tablero, datos[0], datos[1], datos[2])
+        ap.aproximacion(tablero, datos[0], datos[1], datos[2])
     else:
-        backtracking(tablero, datos[0], datos[1], datos[2])
+        bt.backtracking(tablero, datos[0], datos[1], datos[2])
 
     return formatear_tablero(tablero, datos[0], datos[1], datos[2], sum(datos[1]) + sum(datos[2]))
 
