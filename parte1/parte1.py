@@ -46,6 +46,8 @@ def greedy(arr_datos):
                 turno("Última moneda para Mateo", turnos, i_ultima, monedas_mateo, arr_datos)
                 i_ultima -= 1
         turno_sophia = not turno_sophia
+    
+    return [turnos, "Ganancia de Sophia: " + str(sum(monedas_sophia))]
 
 
 def obtener_lista_monedas(path):
