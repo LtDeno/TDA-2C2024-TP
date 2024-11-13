@@ -54,30 +54,20 @@ import sys, bt, pl, jj, ap
 
 
 # Devuelve la demanda insatisfecha/restante
-def validar_demanda(tablero, d_filas, d_columnas):
-    demanda_sobresatisfecha = False  # para comprobar que una demanda de fila o columna no se haya pasado
-    for i in range(len(tablero)):  # itero filas
-        if d_filas[i] < 0:  # demasiadas casillas ocupadas en la fila i
-            demanda_sobresatisfecha = True
-            break
-        for j in range(len(tablero[i])):  # itero columnas
-            if d_columnas[j] < 0:  # demasiadas casillas ocupadas en la columna j
-                demanda_sobresatisfecha = True
-                break
-            if tablero[i][j]:  # True si la casilla esta ocupada
-                d_filas[i] -= 1  # reduzco la demanda insatisfecha de la fila i
-                d_columnas[j] -= 1  # reduzco la demanda insatisfecha de la columna j
-
-    return -1 if demanda_sobresatisfecha else (sum(d_filas) + sum(d_columnas))
+def calcular_demanda_cumplida(asignaciones):
+    suma = 0
+    for asignacion in asignaciones.values():
+        suma += (abs(asignacion[0][0] - asignacion[1][0]) + abs(asignacion[0][1] - asignacion[1][1]) + 1) * 2
+    return suma
 
 
 # Crea un formato segun Resultados_Esperados.txt
-def formatear_resultados(tablero, asignaciones, d_filas, d_columnas, d_total):
+def formatear_resultados(asignaciones, d_total):
     formateado = ["Posiciones:"]
-    for i in range(asignaciones):
-        formateado.append(str(i) + ": " + str(asignaciones[i][1]) + " - " + str(asignaciones[i][0]))
+    for key in asignaciones.keys():
+        formateado.append(str(key) + ": " + str(asignaciones[key][0]) + " - " + str(asignaciones[key][1]))
 
-    formateado.append("Demanda cumplida: " + str(d_total - validar_demanda(tablero, d_filas, d_columnas)))
+    formateado.append("Demanda cumplida: " + str(calcular_demanda_cumplida(asignaciones)))
     formateado.append("Demanda total: " + str(d_total))
     return formateado
 
@@ -89,7 +79,7 @@ def gen_asignacion(fila_fin, fila_inicio, columna_fin, columna_inicio):
 # Elije el algoritmo segun el argumento de ejecucion del programa, usa por defecto Backtracking.
 # El algoritmo devuelve la asignacion de posiciones, y ya que estamos,
 # coloca los barcos en el tablero para que el validador lo valide.
-# Las asignaciones han de ser ordenadas segun el orden en el arreglo de barcos y generadas usando gen_asignacion().
+# Las asignaciones, en un diccionario, han de ser ordenadas segun el orden en el arreglo de barcos y generadas usando gen_asignacion().
 def elegir_algoritmo(datos, modo):
     tablero = [[0 for _ in range(len(datos[2]))] for _ in range(len(datos[1]))]
     asignaciones = None
@@ -103,7 +93,7 @@ def elegir_algoritmo(datos, modo):
     else:
         asignaciones = bt.backtracking(tablero, datos[0], datos[1], datos[2])
 
-    return formatear_resultados(tablero, asignaciones, datos[1], datos[2], sum(datos[1]) + sum(datos[2]))
+    return formatear_resultados(asignaciones, sum(datos[1]) + sum(datos[2]))
 
 
 # Devuelve un array con, y en este orden: array de barcos, array de demanda de filas y array de demanda de columnas.
