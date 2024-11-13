@@ -43,14 +43,15 @@ import sys
 """
 
 
-def texto(jugador, posicion, valor):
-    return jugador + " debe agarrar la " + posicion + " (" + str(valor) + ")"
+def turno(indicacion, arr_turnos, indice, arr_monedas, monedas):
+    arr_turnos.append(indicacion)
+    arr_monedas.append(monedas[indice])
 
 
 def reconstruccion(monedas, tabla):
-    sum_sophia = 0
-    sum_mateo = 0
     turnos = []
+    monedas_sophia = []
+    monedas_mateo = []
     i = 0
     f = len(monedas) - 1
     turno_sophia = True
@@ -64,27 +65,23 @@ def reconstruccion(monedas, tabla):
 
             if (monedas[f] + tabla[i_aux_ultima_moneda][f_aux_ultima_moneda] >
                     monedas[i] + tabla[i_aux_primera_moneda][f_aux_primera_moneda]):
-                sum_sophia += monedas[f]
-                turnos.append(texto("Sophia", "ultima", monedas[f]))
+                turno("Última moneda para Sophia", turnos, f, monedas_sophia, monedas)
                 f -= 1
             else:
-                sum_sophia += monedas[i]
-                turnos.append(texto("Sophia", "primera", monedas[i]))
+                turno("Primera moneda para Sophia", turnos, i, monedas_sophia, monedas)
                 i += 1
 
         else:
             if monedas[f] >= monedas[i]:
-                sum_mateo += monedas[f]
-                turnos.append(texto("Mateo", "ultima", monedas[f]))
+                turno("Última moneda para Mateo", turnos, f, monedas_mateo, monedas)
                 f -= 1
             else:
-                sum_mateo += monedas[i]
-                turnos.append(texto("Mateo", "primera", monedas[i]))
+                turno("Primera moneda para Mateo", turnos, i, monedas_mateo, monedas)
                 i += 1
 
         turno_sophia = not turno_sophia
 
-    return [turnos, "Ganancia Sophia: " + str(sum_sophia), "Ganancia Mateo: " + str(sum_mateo)]
+    return [turnos, "Ganancia Sophia: " + str(sum(monedas_sophia)), "Ganancia Mateo: " + str(sum(monedas_mateo))]
 
 
 # Devuelve un array segun lo pedido en Resultados_Esperados.txt
