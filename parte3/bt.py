@@ -1,82 +1,70 @@
 import parte3
+import time
 
 
-def puedo_poner_barco(pos_ocupadas, indice, barco, fil, col, horizontal):
+def puedo_poner_barco(pos_ocupadas, t_barco, fil, col, horizontal, asignaciones):
     if pos_ocupadas[fil][col]:
         return False
 
     if horizontal:
-        if col + barco > len(pos_ocupadas[0]):
+        if col + t_barco[1] > len(pos_ocupadas[0]):
             return False
 
-        for i in range(barco):
-            if pos_ocupadas[fil][col + i]:
-                return False
+        for i in range(-1, 1):
+            f = 0 if (fil + i < 0 or fil + i >= len(pos_ocupadas)) else i
+            for j in range(-1, t_barco[1] + 1):
+                c = 0 if (col + j < 0 or col + j >= len(pos_ocupadas[0])) else j
+                if pos_ocupadas[fil + f][col + c]:
+                    return False
+
     else:
-        if fil + barco > len(pos_ocupadas):
+        if fil + t_barco[1] > len(pos_ocupadas):
             return False
 
-        for i in range(barco):
-            if pos_ocupadas[fil + i][col]:
-                return False
+        for i in range(-1, t_barco[1] + 1):
+            f = 0 if (fil + i < 0 or fil + i >= len(pos_ocupadas)) else i
+            for j in range(-1, 1):
+                c = 0 if (col + j < 0 or col + j >= len(pos_ocupadas[0])) else j
+                if pos_ocupadas[fil + f][col + c]:
+                    return False
 
     return True
 
 
-def poner_barco(pos_ocupadas, indice, barco, asignacion_actual, fil, col, horizontal):
+def poner_barco(pos_ocupadas, t_barco, d_filas_restantes,  d_columnas_restantes, asignacion_actual, fil, col, horizontal):
     if horizontal:
-        fil_sup = fil if fil <= 0 else fil - 1
-        fil_inf = fil if fil >= len(pos_ocupadas) - 1 else fil + 1
-        col_izq = col if col <= 0 else col - 1
-        col_der = barco if col + barco >= len(pos_ocupadas[0]) else barco + 1
-
-        for i in range(col_izq, col_der):
+        for i in range(t_barco[1]):
             pos_ocupadas[fil][col + i] = True
-            pos_ocupadas[fil_sup][col + i] = True
-            pos_ocupadas[fil_inf][col + i] = True
+            d_columnas_restantes[col + i] -= 1
+        d_filas_restantes[fil] -= t_barco[1]
 
-        asignacion_actual[indice] = parte3.gen_asignacion(fil, fil, col + barco - 1, col)
+        asignacion_actual[t_barco[0]] = parte3.gen_asignacion(fil, fil, col + t_barco[1] - 1, col)
 
     else:
-        col_izq = col if col <= 0 else col - 1
-        col_der = col if col >= len(pos_ocupadas[0]) - 1 else col + 1
-        fil_sup = fil if fil <= 0 else fil - 1
-        fil_inf = barco if fil + barco >= len(pos_ocupadas) else barco + 1
-
-        for i in range(fil_sup, fil_inf):
+        for i in range(t_barco[1]):
             pos_ocupadas[fil + i][col] = True
-            pos_ocupadas[fil + i][col_izq] = True
-            pos_ocupadas[fil + i][col_der] = True
+            d_filas_restantes[fil + i] -= 1
+        d_columnas_restantes[col] -= t_barco[1]
 
-        asignacion_actual[indice] = parte3.gen_asignacion(fil + barco - 1, fil, col, col)
+        asignacion_actual[t_barco[0]] = parte3.gen_asignacion(fil + t_barco[1] - 1, fil, col, col)
 
 
-def sacar_barco(pos_ocupadas, indice, barco, asignacion_actual, fil, col, horizontal):
+def sacar_barco(pos_ocupadas, t_barco, d_filas_restantes,  d_columnas_restantes, asignacion_actual, fil, col, horizontal):
     if horizontal:
-        fil_sup = fil if fil <= 0 else fil - 1
-        fil_inf = fil if fil >= len(pos_ocupadas) - 1 else fil + 1
-        col_izq = col if col <= 0 else col - 1
-        col_der = barco if col + barco >= len(pos_ocupadas[0]) else barco + 1
-
-        for i in range(col_izq, col_der):
+        for i in range(t_barco[1]):
             pos_ocupadas[fil][col + i] = False
-            pos_ocupadas[fil_sup][col + i] = False
-            pos_ocupadas[fil_inf][col + i] = False
+            d_columnas_restantes[col + i] += 1
+        d_filas_restantes[fil] += t_barco[1]
 
-        asignacion_actual.pop(indice)
+        asignacion_actual.pop(t_barco[0])
 
     else:
-        col_izq = col if col <= 0 else col - 1
-        col_der = col if col >= len(pos_ocupadas[0]) - 1 else col + 1
-        fil_sup = fil if fil <= 0 else fil - 1
-        fil_inf = barco if fil + barco >= len(pos_ocupadas) else barco + 1
-
-        for i in range(fil_sup, fil_inf):
+        for i in range(t_barco[1]):
             pos_ocupadas[fil + i][col] = False
-            pos_ocupadas[fil + i][col_izq] = False
-            pos_ocupadas[fil + i][col_der] = False
+            d_filas_restantes[fil + i] += 1
+        d_columnas_restantes[col] += t_barco[1]
 
-        asignacion_actual.pop(indice)
+        asignacion_actual.pop(t_barco[0])
 
 
 def calcular_demandas_cumplidas(asignaciones):
@@ -86,7 +74,13 @@ def calcular_demandas_cumplidas(asignaciones):
     return sumatoria
 
 
-def bt_recursivo(pos_ocupadas, indice, barcos, barcos_a_omitir, d_filas, d_columnas, asignacion_actual, mejor_asignacion):
+def ya_no_llego(asignacion_actual, mejor_demanda_cumplida, long_barcos_restante):
+    if calcular_demandas_cumplidas(asignacion_actual) + long_barcos_restante > mejor_demanda_cumplida:
+        return False
+    return True
+
+
+def bt_recursivo(pos_ocupadas, indice, barcos, barcos_a_omitir, d_filas, d_columnas, d_filas_restantes, d_columnas_restantes, asignacion_actual, mejor_asignacion, long_barcos_restante):
     if indice == len(barcos):
         demanda_cumplida_actual = calcular_demandas_cumplidas(asignacion_actual)
         if mejor_asignacion[1] < demanda_cumplida_actual:
@@ -94,27 +88,32 @@ def bt_recursivo(pos_ocupadas, indice, barcos, barcos_a_omitir, d_filas, d_colum
             mejor_asignacion[1] = demanda_cumplida_actual
         return
 
-    barco = barcos[indice]
+    if ya_no_llego(asignacion_actual, mejor_asignacion[1], long_barcos_restante):
+        return
+
+    t_barco = barcos[indice]
 
     if not barcos_a_omitir[indice]:
         for fil in range(len(d_filas)):
             for col in range(len(d_columnas)):
-                if puedo_poner_barco(pos_ocupadas, indice, barco, fil, col, True):
-                    poner_barco(pos_ocupadas, indice, barco, asignacion_actual, fil, col, True)
-                    bt_recursivo(pos_ocupadas, indice + 1, barcos, barcos_a_omitir, d_filas, d_columnas, asignacion_actual, mejor_asignacion)
-                    sacar_barco(pos_ocupadas, indice, barco, asignacion_actual, fil, col, True)
+                if puedo_poner_barco(pos_ocupadas, t_barco, fil, col, True, asignacion_actual):
+                    poner_barco(pos_ocupadas, t_barco, d_filas_restantes, d_columnas_restantes, asignacion_actual, fil, col, True)
+                    bt_recursivo(pos_ocupadas, indice + 1, barcos, barcos_a_omitir, d_filas, d_columnas, d_filas_restantes, d_columnas_restantes, asignacion_actual, mejor_asignacion, long_barcos_restante - t_barco[1])
+                    sacar_barco(pos_ocupadas, t_barco, d_filas_restantes, d_columnas_restantes, asignacion_actual, fil, col, True)
 
-                if puedo_poner_barco(pos_ocupadas, indice, barco, fil, col, False):
-                    poner_barco(pos_ocupadas, indice, barco, asignacion_actual, fil, col, False)
-                    bt_recursivo(pos_ocupadas, indice + 1, barcos, barcos_a_omitir, d_filas, d_columnas, asignacion_actual, mejor_asignacion)
-                    sacar_barco(pos_ocupadas, indice, barco, asignacion_actual, fil, col, False)
+                if puedo_poner_barco(pos_ocupadas, t_barco, fil, col, False, asignacion_actual):
+                    poner_barco(pos_ocupadas, t_barco, d_filas_restantes, d_columnas_restantes, asignacion_actual, fil, col, False)
+                    bt_recursivo(pos_ocupadas, indice + 1, barcos, barcos_a_omitir, d_filas, d_columnas, d_filas_restantes, d_columnas_restantes, asignacion_actual, mejor_asignacion, long_barcos_restante - t_barco[1])
+                    sacar_barco(pos_ocupadas, t_barco, d_filas_restantes, d_columnas_restantes, asignacion_actual, fil, col, False)
+
+    bt_recursivo(pos_ocupadas, indice + 1, barcos, barcos_a_omitir, d_filas, d_columnas, d_filas_restantes, d_columnas_restantes, asignacion_actual, mejor_asignacion, long_barcos_restante - t_barco[1])
 
 
 def pos_ocupadas_inicial(tablero):
     return [[False for _ in range(len(tablero[0]))] for _ in range(len(tablero))]
 
 
-def barcos_demasiado_largos(barcos, d_filas, d_columnas):
+def barcos_demasiados_largos(barcos, d_filas, d_columnas):
     maximo = max(max(d_filas), max(d_columnas))
     a_omitir = []
     for b in barcos:
@@ -126,27 +125,70 @@ def barcos_demasiado_largos(barcos, d_filas, d_columnas):
     return a_omitir
 
 
+def ordenar_en_tuplas(barcos):
+    barcos_ordenados = []
+    for i in range(len(barcos)):
+        barcos_ordenados.append((i, barcos[i]))
+
+    barcos_ordenados.sort(reverse=True, key=lambda tupla: tupla[1])
+    return barcos_ordenados
+
+
+def reconstruir_asignaciones(asignaciones, n_barcos):
+    reconstruido = {}
+    for i in range(n_barcos):
+        if i in asignaciones:
+            reconstruido[i] = asignaciones[i]
+        else:
+            reconstruido[i] = None
+    return reconstruido
+
+
+def sumar_longitudes(barcos):
+    sumatoria = 0
+    for b in barcos:
+        sumatoria += b
+    return sumatoria
+
+
 def mostrar_tablero(asignaciones, d_filas, d_columnas):
     tab = [["-" for _ in range(len(d_columnas))] for _ in range(len(d_filas))]
     for key in asignaciones.keys():
-        desplazamiento = (asignaciones[key][0][0] - asignaciones[key][1][0], asignaciones[key][0][1] - asignaciones[key][1][1])
-        if desplazamiento[0] == 0:
-            for i in range(desplazamiento[1]+1):
-                tab[asignaciones[key][1][0]][asignaciones[key][1][1] + i] = str(key)
-        else:
-            for i in range(desplazamiento[0]+1):
-                tab[asignaciones[key][1][0] + i][asignaciones[key][1][1]] = str(key)
+        if asignaciones[key] is not None:
+            desplazamiento = (asignaciones[key][0][0] - asignaciones[key][1][0], asignaciones[key][0][1] - asignaciones[key][1][1])
+            if desplazamiento[0] == 0:
+                for i in range(desplazamiento[1]+1):
+                    tab[asignaciones[key][1][0]][asignaciones[key][1][1] + i] = str(key)
+            else:
+                for i in range(desplazamiento[0]+1):
+                    tab[asignaciones[key][1][0] + i][asignaciones[key][1][1]] = str(key)
 
     print()
     for t in tab:
         print(t)
 
 
+"""
+Podas:
+- Si un barco es mas largo que la restriccion mas alta (la menos restrictiva), no se lo intenta poner (barcos_demasiados_largos())
+- Se ordenan los barcos de mayor a menor, para poner los barcos mas restrictivos primero (ordenar_en_tuplas())
+- Si la suma de las longitudes de los barcos restantes junto a la demanda cumplida actual no es suficiente como para superar la mejor demanda cumplida al momento, se corta la "rama"
+
+Posibles podas:
+- Despues de poner un barco, rehacer los barcos a omitir con las demandas restantes
+"""
+
+
 def backtracking(tablero, barcos, d_filas, d_columnas):  # Lautaro
+    s = time.time()
+
     mejor_asignacion = [{}, float('-inf')]
+    bt_recursivo(pos_ocupadas_inicial(tablero), 0, ordenar_en_tuplas(barcos), barcos_demasiados_largos(barcos, d_filas, d_columnas),
+                 d_filas, d_columnas, d_filas.copy(), d_columnas.copy(), {}, mejor_asignacion, sumar_longitudes(barcos))
 
-    bt_recursivo(pos_ocupadas_inicial(tablero), 0, barcos, barcos_demasiado_largos(barcos, d_filas, d_columnas),
-                 d_filas, d_columnas, {}, mejor_asignacion)
+    mejor_asignacion[0] = reconstruir_asignaciones(mejor_asignacion[0], len(barcos))
 
+    f = time.time()
+    print(f-s)
     mostrar_tablero(mejor_asignacion[0], d_filas, d_columnas)
     return mejor_asignacion[0]

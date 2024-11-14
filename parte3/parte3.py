@@ -57,7 +57,8 @@ import sys, bt, pl, jj, ap
 def calcular_demanda_cumplida(asignaciones):
     suma = 0
     for asignacion in asignaciones.values():
-        suma += (abs(asignacion[0][0] - asignacion[1][0]) + abs(asignacion[0][1] - asignacion[1][1]) + 1) * 2
+        if asignacion is not None:
+            suma += (abs(asignacion[0][0] - asignacion[1][0]) + abs(asignacion[0][1] - asignacion[1][1]) + 1) * 2
     return suma
 
 
@@ -65,7 +66,10 @@ def calcular_demanda_cumplida(asignaciones):
 def formatear_resultados(asignaciones, d_total):
     formateado = ["Posiciones:"]
     for key in asignaciones.keys():
-        formateado.append(str(key) + ": " + str(asignaciones[key][0]) + " - " + str(asignaciones[key][1]))
+        if asignaciones[key] is None:
+            formateado.append(str(key) + ": " + str(asignaciones[key]))
+        else:
+            formateado.append(str(key) + ": " + str(asignaciones[key][0]) + " - " + str(asignaciones[key][1]))
 
     formateado.append("Demanda cumplida: " + str(calcular_demanda_cumplida(asignaciones)))
     formateado.append("Demanda total: " + str(d_total))
