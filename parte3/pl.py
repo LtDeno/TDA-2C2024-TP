@@ -43,11 +43,11 @@ def proglineal(tablero, barcos, d_filas, d_columnas):  # Matias
                 terminos_sumatoria = []
                 for i_b in range(max(i-barcos[b]+1, 0), i):
                     terminos_sumatoria.append((y_celdas_ocupadas_barcos[b][i_b][j], 1))
-                for i_b in range(i+1, min(i+barcos[b], cant_col - 1)):
+                for i_b in range(i+1, min(i+barcos[b], cant_fil)):
                     terminos_sumatoria.append((y_celdas_ocupadas_barcos[b][i_b][j], 1))
                 for j_b in range(max(j-barcos[b]+1, 0), j):
                     terminos_sumatoria.append((y_celdas_ocupadas_barcos[b][i][j_b], 1))
-                for j_b in range(j+1, min(j+barcos[b], cant_col - 1)):
+                for j_b in range(j+1, min(j+barcos[b], cant_col)):
                     terminos_sumatoria.append((y_celdas_ocupadas_barcos[b][i][j_b], 1))
                 # problem += Sumatoria(terminos_sumatoria) <= ((barcos[b] - 1) - 1 + y_celdas_ocupadas_barcos[b][i][j]) # (?) ESTA RESTRICCIÓN PODRÍA ROMPERSE EN CASO DE y_celdas_ocupadas_barcos[b][i][j] = 0. ADEMÁS, ESTA RESTRICCIÓN ES REDUNDANTE CON LA SIGUIENTE
                 problem += Sumatoria(terminos_sumatoria) >= ((barcos[b] - 1) * y_celdas_ocupadas_barcos[b][i][j])
@@ -66,11 +66,10 @@ def proglineal(tablero, barcos, d_filas, d_columnas):  # Matias
             for j in range(cant_col):
                 terminos_sumatoria = []
                 for b_aux in range(b+1, cant_bar):
-                    for i_aux in range(max(i-1, 0), min(i+2, cant_col - 1)):
-                        for j_aux in range(max(i-1, 0), min(i+2, cant_col - 1)):
+                    for i_aux in range(max(i-1, 0), min(i+2, cant_fil)):
+                        for j_aux in range(max(j-1, 0), min(j+2, cant_col)):
                             terminos_sumatoria.append((y_celdas_ocupadas_barcos[b_aux][i_aux][j_aux], 1))
-                problem += Sumatoria(terminos_sumatoria) <= 9 * (1 - y_celdas_ocupadas_barcos[b][i][j])
-
+                problem += Sumatoria(terminos_sumatoria) <= 6 - (6 * y_celdas_ocupadas_barcos[b][i][j])
 
     # FUNCIÓN OBJETIVO
     # Maximizar la cantidad de casillas ocupadas por barcos
@@ -108,7 +107,7 @@ def proglineal(tablero, barcos, d_filas, d_columnas):  # Matias
 
 
 def mostrar_tabla(y_celdas_ocupadas_barcos):
-    tab = [["-" for _ in range(len(y_celdas_ocupadas_barcos[0]))] for _ in range(len(y_celdas_ocupadas_barcos[0][0]))]
+    tab = [["-" for _ in range(len(y_celdas_ocupadas_barcos[0][0]))] for _ in range(len(y_celdas_ocupadas_barcos[0]))]
     for b in range(len(y_celdas_ocupadas_barcos)):
         for i in range(len(y_celdas_ocupadas_barcos[0])):
             for j in range(len(y_celdas_ocupadas_barcos[0][0])):
