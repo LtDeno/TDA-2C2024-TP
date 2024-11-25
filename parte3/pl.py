@@ -17,7 +17,7 @@ def proglineal(tablero, barcos, d_filas, d_columnas):  # Matias
         for i in range(cant_fil):
             y_celdas_ocupadas_barcos[b].append([])
             for j in range(cant_col):
-                y_celdas_ocupadas_barcos[i].append(pulp.LpVariable("y_" + str(b) + "_" + str(i) + "_" + str(j), cat="Binary"))
+                y_celdas_ocupadas_barcos[b][i].append(pulp.LpVariable("y_" + str(b) + "_" + str(i) + "_" + str(j), cat="Binary"))
 
 
     # RESTRICCIONES:
@@ -82,9 +82,37 @@ def proglineal(tablero, barcos, d_filas, d_columnas):  # Matias
     problem += Sumatoria(terminos_sumatoria)
     problem.solve()
 
+    mostrar_tabla(y_celdas_ocupadas_barcos)
 
     # TRADUCCIÓN DEL RESULTADO
-    # TODO
     resultado = {}
+    for b in range(cant_bar):
+        resultado[b] = None
+        barco_encontrado = False
+        for i in range(cant_fil):
+            for j in range(cant_col):
+                if pulp.value(y_celdas_ocupadas_barcos[b][i][j]) == 1.0:
+                    barco_encontrado = True
+                    resultado[b] = [(i, j)]
+                    #if barcos[b] > 1:
+                    if (i < cant_fil-1) and (pulp.value(y_celdas_ocupadas_barcos[b][i+1][j]) == 1.0):
+                        resultado[b].append((i + barcos[b] - 1, j))
+                    else:
+                        resultado[b].append((i, j + barcos[b] - 1))
+                    break
+            if barco_encontrado:
+                break
 
     return resultado
+
+
+
+def mostrar_tabla(y_celdas_ocupadas_barcos):
+    tab = [["-" for _ in range(len(y_celdas_ocupadas_barcos[0]))] for _ in range(len(y_celdas_ocupadas_barcos[0][0]))]
+    for b in range(len(y_celdas_ocupadas_barcos)):
+        for i in range(len(y_celdas_ocupadas_barcos[0])):
+            for j in range(len(y_celdas_ocupadas_barcos[0][0])):
+                if pulp.value(y_celdas_ocupadas_barcos[b][i][j]) == 1.0:
+                    tab[i][j] = str(b)
+    for t in tab:
+        print(t)
