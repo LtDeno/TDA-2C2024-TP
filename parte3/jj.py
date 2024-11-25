@@ -25,31 +25,21 @@ def colocar_barcos(tablero, barcos, d_filas_restantes, d_columnas_restantes):
         fila = seleccionar_fila(d_filas_restantes)
         columna = seleccionar_columna(d_columnas_restantes)
 
-        # Imprimo los pasos p/ debug..
-        # print(f"\nBarco de longitud {barco}:")
-        # print(f"Fila con mayor demanda: Fila {fila}, Demanda {d_filas_restantes[fila]}")
-        # print(f"Columna con mayor demanda: Columna {columna}, Demanda {d_columnas_restantes[columna]}")
-
         if d_filas_restantes[fila] >= d_columnas_restantes[columna]:
             for col in range(len(tablero[0])):
                 if puedo_colocar_el_barco(tablero, d_filas_restantes, d_columnas_restantes, fila, col, barco, True):
                     colocar_barco(tablero, d_filas_restantes, d_columnas_restantes, fila, col, barco, True)
                     asignaciones[i] = [(fila, col), (fila, col + barco - 1)]
                     colocado = True
-                    # print(f"Barco colocado horizontalmente en fila {fila}, desde columna {col} hasta columna {col + barco - 1}")
                     break
         else:
-            for row in range(len(tablero)):
-                if puedo_colocar_el_barco(tablero, d_filas_restantes, d_columnas_restantes, row, columna, barco, False):
-                    colocar_barco(tablero, d_filas_restantes, d_columnas_restantes, row, columna, barco, False)
-                    asignaciones[i] = [(row, columna), (row + barco - 1, columna)]
+            for fila in range(len(tablero)):
+                if puedo_colocar_el_barco(tablero, d_filas_restantes, d_columnas_restantes, fila, columna, barco, False):
+                    colocar_barco(tablero, d_filas_restantes, d_columnas_restantes, fila, columna, barco, False)
+                    asignaciones[i] = [(fila, columna), (fila + barco - 1, columna)]
                     colocado = True
-                    # print(f"Barco colocado verticalmente en columna {columna}, desde fila {row} hasta fila {row + barco - 1}")
                     break
-
-        # Si el barco no pudo colocarse, se pasa al siguiente barco..
         if not colocado:
-            # print(f"Barco de longitud {barco} no entró en el tablero.")
             continue
 
     return asignaciones
