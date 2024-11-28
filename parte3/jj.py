@@ -1,3 +1,19 @@
+"""
+La razón de aproximación de un algoritmo mide qué tan cerca está la solución aproximada del algoritmo A(I) en comparación
+con la solución óptima z(I) para cualquier instancia del problema.
+
+Definición formal de la aproximación:
+
+Sea I cualquier instancia del problema de La Batalla Naval.
+Sea A(I) la demanda cumplida por el algoritmo aproximado para I.
+Sea z(I) la demanda cumplida por la solución óptima para I.
+
+La razón de aproximación r(A) se define como:
+
+            r(A) = max (A(I)/z(I)), para todas las instancias de I.
+
+"""
+
 def johnjellicoe(tablero, barcos, d_filas, d_columnas):
     """
     Algoritmo John Jellicoe:
