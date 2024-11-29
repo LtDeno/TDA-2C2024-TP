@@ -99,6 +99,21 @@ def elegir_algoritmo(datos, modo):
 
     return formatear_resultados(asignaciones, sum(datos[1]) + sum(datos[2]))
 
+def elegir_algoritmo_demanda_cumplida(datos, modo):
+    tablero = [[0 for _ in range(len(datos[2]))] for _ in range(len(datos[1]))]
+    asignaciones = None
+
+    if modo == "PL":
+        asignaciones = pl.proglineal(tablero, datos[0], datos[1], datos[2])
+    elif modo == "JJ":
+        asignaciones = jj.johnjellicoe(tablero, datos[0], datos[1], datos[2])
+    elif modo == "AP":
+        asignaciones = ap.aproximacion(tablero, datos[0], datos[1], datos[2])
+    else:
+        asignaciones = bt.backtracking(tablero, datos[0], datos[1], datos[2])
+
+    return calcular_demanda_cumplida(asignaciones)
+
 
 # Devuelve un array con, y en este orden: array de barcos, array de demanda de filas y array de demanda de columnas.
 def obtener_datos(path):
