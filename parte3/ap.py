@@ -6,7 +6,7 @@ def aproximacion(tablero, barcos, d_filas, d_columnas):
     """
     d_filas_restantes = d_filas[:]
     d_columnas_restantes = d_columnas[:]
-    barcos.sort()
+    barcos.sort(reverse=True)
     asignaciones = colocar_barcos(tablero, barcos, d_filas_restantes, d_columnas_restantes)
     imprimir_tablero(tablero)
 
