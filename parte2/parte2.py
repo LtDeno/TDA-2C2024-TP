@@ -23,23 +23,6 @@ import sys
     Yendo a la representacion, i es tanto el indice de inicio del arreglo como la fila, y f es el indice del fin del 
     arreglo tal cual es la columna. Mirar el seguimiento de la ecuacion de recurrencia del .xlsx. Las casillas azules 
     son los seguimientos de los optimos para esos dados (i, f), y cada valor de la tabla tambien lo es para cada tal.
-    
-    Induccion matematica:
-    1) Planteo casos base:
-        i = 0      -> OPT(0, 0) = 0 es optimo y el valor maximo porque no hay valores;
-        i = f      -> OPT(i, i) = V[i] es optimo y el valor maximo porque hay un solo valor, siendo ese el maximo;
-        i = f - 1  -> OPT(i, i+1) = max(V[i], V[i+1]) es optimo y el valor maximo porque, dado un solo turno, se elije
-                                                      el valor mas alto entre ambos.
-    2) Paso inductivo: 
-        OPT(i, f) = max(V[i] + (OPT(i + 1, f - 1) si V[i+1] < V[f] sino OPT(i + 2, f)),
-                        V[f] + (OPT(i + 1, f - 1) si V[i] > V[f-1] sino OPT(i, f - 2))
-        3 posibilidades para el llamado recursivo:
-         - OPT(i + 1, f - 1);
-         - OPT(i + 2, f);
-         - OPT(i, f - 2)
-        posibilidades, hipotesis, las cuales suponemos verdaderas. Se repiten asi los llamados recursivos con las 3 
-        posibilidades hasta llegar a alguno de los casos base planteados, casos ya antes demostrados como optimos,
-        dejando asi demostrado OPT(i, f) como optimo.
 """
 
 
