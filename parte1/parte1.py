@@ -1,5 +1,6 @@
 import sys
 
+
 def turno(indicacion, arr_turnos, indice, arr_monedas, arr_datos):
     arr_turnos.append(indicacion)
     arr_monedas.append(arr_datos[indice])
