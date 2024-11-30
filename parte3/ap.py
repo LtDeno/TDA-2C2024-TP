@@ -1,14 +1,17 @@
+import copy
+
+
 def aproximacion(tablero, barcos, d_filas, d_columnas):
     """
     El algoritmo propuesto sigue la regla de "colocar primero los barcos pequeños en la primera posición válida, cumpliendo con las restricciones
     del tablero y las demandas restantes".
     Esto lo hace priorizando las decisiones locales inmediatas y esperando que dichas decisiones conduzcan a una óptima solución global.
     """
-    d_filas_restantes = d_filas[:]
-    d_columnas_restantes = d_columnas[:]
-    barcos.sort(reverse=True)
-    asignaciones = colocar_barcos(tablero, barcos, d_filas_restantes, d_columnas_restantes)
-    imprimir_tablero(tablero)
+    tablero_resultado = copy.deepcopy(tablero)
+    d_filas_restantes = copy.deepcopy(d_filas)
+    d_columnas_restantes = copy.deepcopy(d_columnas)
+    asignaciones = colocar_barcos(tablero_resultado, sorted(barcos, reverse=True), d_filas_restantes, d_columnas_restantes)
+    imprimir_tablero(tablero_resultado)
 
     return asignaciones
 

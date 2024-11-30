@@ -14,6 +14,9 @@ La razón de aproximación r(A) se define como:
 
 """
 
+import copy
+
+
 def johnjellicoe(tablero, barcos, d_filas, d_columnas):
     """
     Algoritmo John Jellicoe:
@@ -21,11 +24,11 @@ def johnjellicoe(tablero, barcos, d_filas, d_columnas):
         - Si el barco de mayor longitud es más largo que dicha demanda, saltea ese barco y continua con el siguiente de la lista.
         - Vuelve a probar hasta que no queden más barcos por probar o no haya más demandas por cumplir.
     """
-    d_filas_restantes = d_filas[:]
-    d_columnas_restantes = d_columnas[:]
-    barcos.sort(reverse=True)
-    asignaciones = colocar_barcos(tablero, barcos, d_filas_restantes, d_columnas_restantes)
-    imprimir_tablero(tablero)
+    tablero_resultado = copy.deepcopy(tablero)
+    d_filas_restantes = copy.deepcopy(d_filas)
+    d_columnas_restantes = copy.deepcopy(d_columnas)
+    asignaciones = colocar_barcos(tablero_resultado, sorted(barcos, reverse=True), d_filas_restantes, d_columnas_restantes)
+    imprimir_tablero(tablero_resultado)
 
     return asignaciones
 

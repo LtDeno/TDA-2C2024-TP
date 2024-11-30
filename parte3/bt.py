@@ -1,3 +1,4 @@
+import copy
 import parte3
 import time
 
@@ -198,7 +199,7 @@ def backtracking(tablero, barcos, d_filas, d_columnas):  # Lautaro
 
     mejor_asignacion = [{}, float('-inf')]
     bt_recursivo(pos_ocupadas_inicial(tablero), 0, ordenar_en_tuplas(barcos), barcos_demasiados_largos(ordenar_en_tuplas(barcos), d_filas, d_columnas),
-                 d_filas, d_columnas, d_filas.copy(), d_columnas.copy(), {}, mejor_asignacion, sumar_longitudes(barcos))
+                 d_filas, d_columnas, copy.deepcopy(d_filas), copy.deepcopy(d_columnas), {}, mejor_asignacion, sumar_longitudes(barcos))
 
     mejor_asignacion[0] = reconstruir_asignaciones(mejor_asignacion[0], len(barcos))
 
