@@ -2,7 +2,7 @@ import pulp
 from pulp import LpAffineExpression as Sumatoria
 
 
-def proglineal(tablero, barcos, d_filas, d_columnas):  # Matias
+def proglineal(tablero, barcos, d_filas, d_columnas):
     problem = pulp.LpProblem("Problema de Barcos", pulp.LpMaximize)
 
     cant_bar = len(barcos)
@@ -49,7 +49,6 @@ def proglineal(tablero, barcos, d_filas, d_columnas):  # Matias
                     terminos_sumatoria.append((y_celdas_ocupadas_barcos[b][i][j_b], 1))
                 for j_b in range(j+1, min(j+barcos[b], cant_col)):
                     terminos_sumatoria.append((y_celdas_ocupadas_barcos[b][i][j_b], 1))
-                # problem += Sumatoria(terminos_sumatoria) <= ((barcos[b] - 1) - 1 + y_celdas_ocupadas_barcos[b][i][j]) # (?) ESTA RESTRICCIÓN PODRÍA ROMPERSE EN CASO DE y_celdas_ocupadas_barcos[b][i][j] = 0. ADEMÁS, ESTA RESTRICCIÓN ES REDUNDANTE CON LA SIGUIENTE
                 problem += Sumatoria(terminos_sumatoria) >= ((barcos[b] - 1) * y_celdas_ocupadas_barcos[b][i][j])
 
     # La cantidad de celdas ocupadas por un barco de largo L no puede superar las L celdas

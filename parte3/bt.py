@@ -194,7 +194,7 @@ Posibles podas:
 """
 
 
-def backtracking(tablero, barcos, d_filas, d_columnas):  # Lautaro
+def backtracking(tablero, barcos, d_filas, d_columnas):
     s = time.time()
 
     mejor_asignacion = [{}, float('-inf')]

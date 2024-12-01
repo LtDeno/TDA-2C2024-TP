@@ -3,7 +3,7 @@ import copy
 
 def aproximacion(tablero, barcos, d_filas, d_columnas):
     """
-    El algoritmo propuesto sigue la regla de "colocar primero los barcos pequeños en la primera posición válida, cumpliendo con las restricciones
+    El algoritmo propuesto sigue la regla de "colocar primero los barcos grandes en la primera posición válida, cumpliendo con las restricciones
     del tablero y las demandas restantes".
     Esto lo hace priorizando las decisiones locales inmediatas y esperando que dichas decisiones conduzcan a una óptima solución global.
     """

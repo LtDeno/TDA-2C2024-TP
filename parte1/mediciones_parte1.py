@@ -31,8 +31,6 @@ if __name__ == '__main__':
     ax.set_title('Tiempo de ejecución del algoritmo Greedy')
     ax.set_xlabel('Tamaño del array de monedas')
     ax.set_ylabel('Tiempo de ejecución (s)')
-    # TODO: Testear guardado gráfico generado
-    #plt.show()
     plt.savefig('greedy_ejecucion.png', bbox_inches='tight')
 
 
@@ -51,22 +49,17 @@ if __name__ == '__main__':
     ax.plot(x, [c[0] * n + c[1] for n in x], 'r--', label="Ajuste")
     ax.legend()
     fig
-    # TODO: Testear guardado gráfico generado
-    #plt.show()
     plt.savefig('greedy_ajuste.png', bbox_inches='tight')
 
 
 
     ax: plt.Axes
     fig, ax = plt.subplots()
-    # errors = [np.abs(c[0] * n * np.log(n) + c[1] - results[n]) for n in x]
     errors = [np.abs(c[0] * n + c[1] - results[n]) for n in x]
     ax.plot(x, errors)
     ax.set_title('Error de ajuste')
     ax.set_xlabel('Tamaño del array de monedas')
     ax.set_ylabel('Error absoluto (s)')
-    # TODO: Testear guardado gráfico generado
-    #plt.show()
     plt.savefig('greedy_error.png', bbox_inches='tight')
 
 
