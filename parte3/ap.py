@@ -2,11 +2,6 @@ import copy
 
 
 def aproximacion(tablero, barcos, d_filas, d_columnas):
-    """
-    El algoritmo propuesto sigue la regla de "colocar primero los barcos grandes en la primera posición válida, cumpliendo con las restricciones
-    del tablero y las demandas restantes".
-    Esto lo hace priorizando las decisiones locales inmediatas y esperando que dichas decisiones conduzcan a una óptima solución global.
-    """
     tablero_resultado = copy.deepcopy(tablero)
     d_filas_restantes = copy.deepcopy(d_filas)
     d_columnas_restantes = copy.deepcopy(d_columnas)
@@ -15,10 +10,8 @@ def aproximacion(tablero, barcos, d_filas, d_columnas):
 
     return asignaciones
 
+
 def colocar_barcos(tablero, barcos, d_filas_restantes, d_columnas_restantes):
-    """
-    Intenta colocar cada barco en el tablero, cumpliendo las restricciones.
-    """
     asignaciones = {i: None for i in range(len(barcos))}
 
     for i, barco in enumerate(barcos):
@@ -40,10 +33,8 @@ def colocar_barcos(tablero, barcos, d_filas_restantes, d_columnas_restantes):
 
     return asignaciones
 
+
 def puedo_colocar_el_barco(tablero, d_filas_restantes, d_columnas_restantes, fila, columna, longitud, horizontal):
-    """
-    Verifica si un barco puede colocarse en la posición especificada.
-    """
     if horizontal:
         if columna + longitud > len(tablero[0]):
             return False
@@ -62,10 +53,8 @@ def puedo_colocar_el_barco(tablero, d_filas_restantes, d_columnas_restantes, fil
                 return False
     return True
 
+
 def colocar_barco(tablero, d_filas_restantes, d_columnas_restantes, fila, columna, longitud, horizontal):
-    """
-    Coloca un barco en el tablero y actualiza las demandas restantes.
-    """
     if horizontal:
         for c in range(columna, columna + longitud):
             tablero[fila][c] = 1
@@ -77,10 +66,8 @@ def colocar_barco(tablero, d_filas_restantes, d_columnas_restantes, fila, column
             d_filas_restantes[f] -= 1
         d_columnas_restantes[columna] -= longitud
 
+
 def posicion_valida(tablero, fila, columna):
-    """
-    Verifica si una celda es válida para colocar el barco.
-    """
     if tablero[fila][columna] != 0:
         return False
     for df in [-1, 0, 1]:
@@ -90,10 +77,8 @@ def posicion_valida(tablero, fila, columna):
                 return False
     return True
 
+
 def imprimir_tablero(tablero):
-    """
-    Imprime el tablero.
-    """
     print("\nTablero final:")
     for fila in tablero:
         print(" ".join(map(str, fila)))

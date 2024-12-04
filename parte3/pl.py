@@ -11,14 +11,13 @@ def proglineal(tablero, barcos, d_filas, d_columnas):
 
     # VARIABLES
     # y_b_i_j : La casilla ij está ocupada por el barco b
-    y_celdas_ocupadas_barcos = [] #Matriz cubica que tiene una cantidad de elementos igual a barcos*filas*columnas
+    y_celdas_ocupadas_barcos = []  # Matriz cubica que tiene una cantidad de elementos igual a barcos*filas*columnas
     for b in range(cant_bar):
         y_celdas_ocupadas_barcos.append([])
         for i in range(cant_fil):
             y_celdas_ocupadas_barcos[b].append([])
             for j in range(cant_col):
                 y_celdas_ocupadas_barcos[b][i].append(pulp.LpVariable("y_" + str(b) + "_" + str(i) + "_" + str(j), cat="Binary"))
-
 
     # RESTRICCIONES:
     # - Que lo ocupado en filas y columnas no exceda la demanda de las mismas
@@ -92,7 +91,6 @@ def proglineal(tablero, barcos, d_filas, d_columnas):
                 if pulp.value(y_celdas_ocupadas_barcos[b][i][j]) == 1.0:
                     barco_encontrado = True
                     resultado[b] = [(i, j)]
-                    #if barcos[b] > 1:
                     if (i < cant_fil-1) and (pulp.value(y_celdas_ocupadas_barcos[b][i+1][j]) == 1.0):
                         resultado[b].append((i + barcos[b] - 1, j))
                     else:
@@ -102,7 +100,6 @@ def proglineal(tablero, barcos, d_filas, d_columnas):
                 break
 
     return resultado
-
 
 
 def mostrar_tabla(y_celdas_ocupadas_barcos):

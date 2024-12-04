@@ -3,7 +3,7 @@ import parte3
 import time
 
 
-def puedo_poner_barco(pos_ocupadas, t_barco, d_filas_restantes, d_columnas_restantes, fil, col, horizontal, asignaciones):
+def puedo_poner_barco(pos_ocupadas, t_barco, d_filas_restantes, d_columnas_restantes, fil, col, horizontal):
     if pos_ocupadas[fil][col]:
         return False
 
@@ -111,12 +111,12 @@ def bt_recursivo(pos_ocupadas, indice, barcos, barcos_a_omitir, d_filas, d_colum
     if not barcos_a_omitir[indice]:
         for fil in range(len(d_filas)):
             for col in range(len(d_columnas)):
-                if puedo_poner_barco(pos_ocupadas, t_barco, d_filas_restantes, d_columnas_restantes, fil, col, True, asignacion_actual):
+                if puedo_poner_barco(pos_ocupadas, t_barco, d_filas_restantes, d_columnas_restantes, fil, col, True):
                     poner_barco(pos_ocupadas, t_barco, d_filas_restantes, d_columnas_restantes, asignacion_actual, fil, col, True)
                     bt_recursivo(pos_ocupadas, indice + 1, barcos, barcos_a_omitir, d_filas, d_columnas, d_filas_restantes, d_columnas_restantes, asignacion_actual, mejor_asignacion, long_barcos_restante - t_barco[1])
                     sacar_barco(pos_ocupadas, t_barco, d_filas_restantes, d_columnas_restantes, asignacion_actual, fil, col, True)
 
-                if puedo_poner_barco(pos_ocupadas, t_barco, d_filas_restantes, d_columnas_restantes, fil, col, False, asignacion_actual):
+                if puedo_poner_barco(pos_ocupadas, t_barco, d_filas_restantes, d_columnas_restantes, fil, col, False):
                     poner_barco(pos_ocupadas, t_barco, d_filas_restantes, d_columnas_restantes, asignacion_actual, fil, col, False)
                     bt_recursivo(pos_ocupadas, indice + 1, barcos, barcos_a_omitir, d_filas, d_columnas, d_filas_restantes, d_columnas_restantes, asignacion_actual, mejor_asignacion, long_barcos_restante - t_barco[1])
                     sacar_barco(pos_ocupadas, t_barco, d_filas_restantes, d_columnas_restantes, asignacion_actual, fil, col, False)
@@ -181,17 +181,6 @@ def mostrar_tablero(asignaciones, d_filas, d_columnas):
     print()
     for t in tab:
         print(t)
-
-
-"""
-Podas:
-- Si un barco es mas largo que la restriccion mas alta (la menos restrictiva), no se lo intenta poner (barcos_demasiados_largos())
-- Se ordenan los barcos de mayor a menor, para poner los barcos mas restrictivos primero (ordenar_en_tuplas())
-- Si la suma de las longitudes de los barcos restantes junto a la demanda cumplida actual no es suficiente como para superar la mejor demanda cumplida al momento, se corta la "rama"
-
-Posibles podas:
-- Despues de poner un barco, rehacer los barcos a omitir con las demandas restantes
-"""
 
 
 def backtracking(tablero, barcos, d_filas, d_columnas):
