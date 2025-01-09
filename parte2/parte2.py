@@ -83,7 +83,6 @@ def pdinamica(monedas):
             tabla[i][f] = max(monedas[i] + (tabla[i + 1][f - 1] if monedas[i + 1] < monedas[f] else tabla[i + 2][f]),
                               monedas[f] + (tabla[i + 1][f - 1] if monedas[i] > monedas[f - 1] else tabla[i][f - 2]))
 
-    # return reconstruccion(monedas, tabla)
     return tabla
 
 def obtener_lista_monedas(path):
