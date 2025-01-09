@@ -59,7 +59,7 @@ if __name__ == '__main__':
     def obtener_problemas_resueltos_random(size: int):
         monedas = np.random.randint(1, 1000, size)
         tabla = pdinamica(monedas)
-        return [monedas, tabla] #TODO: Ver si la obtención de estos problemas resueltos interfiere con las mediciones
+        return [monedas, tabla]
     
     medicion_pd(pdinamica, obtener_monedas_aleatorias, 20, 1000, 20, "Algoritmo Programación Dinámica", "pd_tabla_opts", lambda n : n**2)
     medicion_pd(reconstruccion, obtener_problemas_resueltos_random, 20, 1000, 20, "Algoritmo Reconstrucción de OPTs de PD", "pd_reconstruccion", lambda n : n)
